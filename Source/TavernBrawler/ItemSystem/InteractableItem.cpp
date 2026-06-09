@@ -29,11 +29,6 @@ void AInteractableItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	while (IsThrown)
-	{
-		FRotator Rotation = FRotator(0.0f, ItemData->RotationSpeed*DeltaTime, 0.0f);
-		AddActorLocalRotation(Rotation);
-	}
 }
 
 void AInteractableItem::Throw(FVector Direction)
@@ -77,6 +72,10 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 		}
 	}
 	IsThrown = false;
+
+	hurtMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
+	hurtMesh->SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
+
 	hurtMesh->OnComponentHit.Clear();
 	hurtMesh->SetSimulatePhysics(false);
 }

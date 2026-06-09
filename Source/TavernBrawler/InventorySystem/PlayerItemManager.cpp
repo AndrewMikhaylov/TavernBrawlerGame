@@ -79,6 +79,7 @@ void UPlayerItemManager::SetupHandSockets(UStaticMeshComponent* leftHand, UStati
 {
 	LeftHand = leftHand;
 	RightHand = rightHand;
+	IsThrowHandEmpty = true;
 }
 
 FVector UPlayerItemManager::CalculateEndPosition(FVector StartPosition, FVector LookingDirection)

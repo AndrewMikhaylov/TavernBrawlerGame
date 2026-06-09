@@ -34,7 +34,9 @@ protected:
 
 	UStaticMeshComponent* visualMesh;
 
+	UPROPERTY(EditAnywhere)
 	UItemData* ItemData;
+
 	float CurrentDurability;
 	float CurrentDamage;
 	float CurrentThrowDamage;
@@ -49,6 +51,7 @@ public:
 
 	void DealHitDamage();
 
+	UFUNCTION()
 	void DealThrowDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		FVector NormalImpulse, const FHitResult& Hit);
 
