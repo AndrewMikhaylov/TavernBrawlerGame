@@ -31,12 +31,11 @@ protected:
 	UCapsuleComponent* hurtMesh;
 
 	UPROPERTY(VisibleAnywhere)
-
 	UStaticMeshComponent* visualMesh;
-
+	
 	UPROPERTY(EditAnywhere)
 	UItemData* ItemData;
-
+	
 	float CurrentDurability;
 	float CurrentDamage;
 	float CurrentThrowDamage;

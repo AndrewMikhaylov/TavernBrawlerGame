@@ -14,7 +14,6 @@ AInteractableItem::AInteractableItem()
 	hurtMesh->SetNotifyRigidBodyCollision(true);
 	visualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
 	visualMesh->SetupAttachment(hurtMesh);
-
 }
 
 // Called when the game starts or when spawned
@@ -83,7 +82,7 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 
 void AInteractableItem::PickUp()
 {
-
+	hurtMesh->SetSimulatePhysics(false);
 }
 
 void AInteractableItem::InitializeItem()
