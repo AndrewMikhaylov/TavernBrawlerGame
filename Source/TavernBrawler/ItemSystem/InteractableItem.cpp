@@ -11,8 +11,10 @@ AInteractableItem::AInteractableItem()
 
 	hurtMesh = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HurtBox"));
 	SetRootComponent(hurtMesh);
+	hurtMesh->SetNotifyRigidBodyCollision(true);
 	visualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
 	visualMesh->SetupAttachment(hurtMesh);
+
 }
 
 // Called when the game starts or when spawned
@@ -21,6 +23,7 @@ void AInteractableItem::BeginPlay()
 	Super::BeginPlay();
 	
 	InitializeItem();
+	hurtMesh->OnComponentHit.AddDynamic(this, &AInteractableItem::DealThrowDamage);
 
 }
 
@@ -36,12 +39,12 @@ void AInteractableItem::Throw(FVector Direction)
 	IsThrown = true;
 	hurtMesh->SetSimulatePhysics(true);
 	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	hurtMesh->SetNotifyRigidBodyCollision(true);
 
 	FVector ThrowDirection = Direction + FVector(0.0f, 0.0f, 0.4f);
 	ThrowDirection.Normalize();
 	hurtMesh->AddImpulse(ThrowDirection*ItemData->ThrowStrength, NAME_None, true);
 
-	hurtMesh->OnComponentHit.AddDynamic(this, &AInteractableItem::DealThrowDamage);
 }
 
 
@@ -70,14 +73,12 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 		{
 			BreakItem();
 		}
-	}
-	IsThrown = false;
+			IsThrown = false;
 
 	hurtMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 	hurtMesh->SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
 
-	hurtMesh->OnComponentHit.Clear();
-	hurtMesh->SetSimulatePhysics(false);
+	}
 }
 
 void AInteractableItem::PickUp()
