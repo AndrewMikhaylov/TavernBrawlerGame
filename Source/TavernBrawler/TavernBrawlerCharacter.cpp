@@ -56,6 +56,9 @@ ATavernBrawlerCharacter::ATavernBrawlerCharacter()
 	PlayerInventory = CreateDefaultSubobject<UPlayerItemManager>(TEXT("InventorySystem"));
 	PlayerInventory->SetupHandSockets(leftHandSocket, rightHandSocket);
 
+	PlayerAttacker = CreateDefaultSubobject<UPlayerAttacker>(TEXT("AttackSystem"));
+	PlayerAttacker->AttackEnded.AddUObject(this, &ATavernBrawlerCharacter::StopAttacking);
+	//PlayerAttacker->AttackEnded.AddUObject(this, &ATavernBrawlerCharacter::ResetAttackCooldown);
 }
 
 void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -81,7 +84,7 @@ void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &ATavernBrawlerCharacter::DoThrow);
 
 		EnhancedInputComponent->BindAction(HitAction, ETriggerEvent::Started, this, &ATavernBrawlerCharacter::DoHit);
-
+		IsReadyToAttack=true;
 
 
 	}
@@ -89,6 +92,17 @@ void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void ATavernBrawlerCharacter::ResetAttackCooldown()
+{
+	FTimerHandle timer;
+	GetWorldTimerManager().SetTimer(timer, this, &ATavernBrawlerCharacter::GetReadyToAttack, .3f, false);
+}
+
+void ATavernBrawlerCharacter::GetReadyToAttack()
+{
+	IsReadyToAttack=true;
 }
 
 
@@ -199,5 +213,16 @@ void ATavernBrawlerCharacter::DoThrow()
 
 void ATavernBrawlerCharacter::DoHit()
 {
-	PlayerInventory->Hit();
+	if (IsReadyToAttack)
+	{
+		PlayerAttacker->DoHitMovement(PlayerInventory->GetCurrentFightItem());
+		PlayerInventory->BeginHitting();
+		IsReadyToAttack=false;	
+	}
+}
+
+void ATavernBrawlerCharacter::StopAttacking()
+{
+	PlayerInventory->EndAttack();
+	ResetAttackCooldown();
 }

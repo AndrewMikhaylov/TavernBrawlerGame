@@ -50,12 +50,20 @@ void UPlayerItemManager::TakeToThrow(FVector StartPosition, FVector LookingDirec
 void UPlayerItemManager::TakeToFight(FVector StartPosition, FVector LookingDirection)
 {
 	AInteractableItem* itemToFight = TakeItem(StartPosition, LookingDirection);
-	FreeFightingHand();
 	if (itemToFight)
 	{
+		if (currentFightItem)
+		{
+			FreeFightingHand();
+		}
 		EquipAsFightWeapon(itemToFight);
 		currentFightItem = itemToFight;
 		currentFightItem->OnItemBroken.AddUObject(this, &UPlayerItemManager::FreeFightingHand);
+		IsFightHandEmpty = false;
+	}
+	else
+	{
+		IsFightHandEmpty = true;
 	}
 }
 
@@ -70,9 +78,12 @@ void UPlayerItemManager::Throw(FVector throwDirection)
 	}
 }
 
-void UPlayerItemManager::Hit()
+void UPlayerItemManager::BeginHitting()
 {
-	currentFightItem->DealHitDamage();
+	if (currentFightItem)
+	{
+		currentFightItem->BeginHitOnOverlap();
+	}
 }
 
 void UPlayerItemManager::SetupHandSockets(UStaticMeshComponent* leftHand, UStaticMeshComponent* rightHand)
@@ -80,6 +91,33 @@ void UPlayerItemManager::SetupHandSockets(UStaticMeshComponent* leftHand, UStati
 	LeftHand = leftHand;
 	RightHand = rightHand;
 	IsThrowHandEmpty = true;
+}
+
+AInteractableItem* UPlayerItemManager::GetCurrentFightItem()
+{
+	if (currentFightItem)
+	{
+		return currentFightItem;
+	}
+	basicWeaponActor = GetWorld()->SpawnActor(BasicWeaponClass);
+	AInteractableItem* basicWeapon = Cast<AInteractableItem>(basicWeaponActor);
+	EquipAsFightWeapon(basicWeapon);
+	currentFightItem = basicWeapon;
+	return currentFightItem;
+}
+
+void UPlayerItemManager::EndAttack()
+{
+	currentFightItem->DeactivateOverlap();
+	if (IsFightHandEmpty)
+	{
+		FreeFightingHand();
+		if (basicWeaponActor)
+		{
+			GetWorld()->DestroyActor(basicWeaponActor);
+			basicWeaponActor=nullptr;	
+		}
+	}
 }
 
 FVector UPlayerItemManager::CalculateEndPosition(FVector StartPosition, FVector LookingDirection)
@@ -121,10 +159,12 @@ void UPlayerItemManager::EquipAsFightWeapon(AInteractableItem* meleeItem)
 
 void UPlayerItemManager::FreeFightingHand()
 {
-	currentFightItem->OnItemBroken.RemoveAll(this);
-	currentFightItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	
-	currentFightItem = nullptr;
-
+	if (currentFightItem)
+	{
+		currentFightItem->OnItemBroken.RemoveAll(this);
+		currentFightItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		IsFightHandEmpty = true;
+		currentFightItem = nullptr;	
+	}
 }
 

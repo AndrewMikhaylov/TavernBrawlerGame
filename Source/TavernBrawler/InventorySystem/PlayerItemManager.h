@@ -32,9 +32,17 @@ public:
 
 	void Throw(FVector throwDirection);
 
-	void Hit();
+	void BeginHitting();
 
 	void SetupHandSockets(UStaticMeshComponent* leftHand, UStaticMeshComponent* rightHand);
+
+	bool IsFightHandEmpty = true;
+
+	AInteractableItem* GetCurrentFightItem();
+	void EndAttack();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AInteractableItem> BasicWeaponClass;
 
 protected:
 	UPROPERTY(EditAnywhere, Category="Take")
@@ -52,7 +60,7 @@ protected:
 	AInteractableItem* currentThrowItem;
 	AInteractableItem* currentFightItem;
 
-
+	AActor* basicWeaponActor;
 private:
 	bool IsThrowHandEmpty;
 

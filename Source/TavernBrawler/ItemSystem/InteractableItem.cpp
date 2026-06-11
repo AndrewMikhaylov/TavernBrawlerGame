@@ -23,7 +23,7 @@ void AInteractableItem::BeginPlay()
 	
 	InitializeItem();
 	hurtMesh->OnComponentHit.AddDynamic(this, &AInteractableItem::DealThrowDamage);
-
+	hurtMesh->OnComponentBeginOverlap.AddDynamic(this, &AInteractableItem::OnOverlapBegin);
 }
 
 // Called every frame
@@ -31,6 +31,20 @@ void AInteractableItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (IsAttacking)
+	{
+		//deal damage
+		CurrentDurability--;
+		if (CurrentDurability == 1)
+		{
+			BreakTransformItem();
+		}
+	}
 }
 
 void AInteractableItem::Throw(FVector Direction)
@@ -47,14 +61,11 @@ void AInteractableItem::Throw(FVector Direction)
 }
 
 
-void AInteractableItem::DealHitDamage()
+void AInteractableItem::BeginHitOnOverlap()
 {
-	//deal damage, if succesfull
-	CurrentDurability--;
-	if (CurrentDurability==0)
-	{
-		BreakItem();
-	}
+	IsAttacking = true;
+	hurtMesh->SetGenerateOverlapEvents(true);
+	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -85,6 +96,16 @@ void AInteractableItem::PickUp()
 	hurtMesh->SetSimulatePhysics(false);
 }
 
+void AInteractableItem::DeactivateOverlap()
+{
+	IsAttacking = false;
+	hurtMesh->SetGenerateOverlapEvents(false);
+	if (CurrentDurability==0)
+	{
+		BreakItem();
+	}
+}
+
 void AInteractableItem::InitializeItem()
 {
 	visualMesh->SetStaticMesh(ItemData->UnbrokenVisualMesh);
@@ -104,7 +125,7 @@ void AInteractableItem::BreakTransformItem()
 void AInteractableItem::BreakItem()
 {
 	OnItemBroken.Broadcast();
-
+	
 	Destroy();
 }
 

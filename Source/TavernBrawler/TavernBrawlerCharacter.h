@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "InventorySystem/PlayerItemManager.h"
+#include "AttackSystem/PlayerAttacker.h"
 #include "TavernBrawlerCharacter.generated.h"
 
 class UInputComponent;
@@ -69,6 +70,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Inventory")
 	UPlayerItemManager* PlayerInventory;
+
+	UPROPERTY(EditAnywhere, Category = "Attacker")
+	UPlayerAttacker* PlayerAttacker;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* ThrowAction;
@@ -129,10 +133,16 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void DoHit();
 
+	void StopAttacking();
+
 protected:
 
 	/** Set up input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+
+	bool IsReadyToAttack;
+	void ResetAttackCooldown();
+	void GetReadyToAttack();
 	
 
 public:
