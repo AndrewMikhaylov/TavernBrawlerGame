@@ -58,7 +58,6 @@ void UPlayerAttacker::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void UPlayerAttacker::DoHitMovement(AActor* rightHand)
 {
-	// if weapon in hand rotate weapon around body if not spawn fist and move it forward
 	if (rightHand)
 	{
 		RightHandActor = rightHand;

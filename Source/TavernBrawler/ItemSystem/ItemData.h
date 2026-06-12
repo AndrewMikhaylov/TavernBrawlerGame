@@ -20,17 +20,11 @@ public:
 	int Durability;
 
 	UPROPERTY(EditDefaultsOnly)
-	float UnbrokenThrowDamage;
+	float ThrowDamage;
 
 	UPROPERTY(EditDefaultsOnly)
-	float UnbrokenHitDamage;
-
-	UPROPERTY(EditDefaultsOnly)
-	float BrokenThrowDamage;
-
-	UPROPERTY(EditDefaultsOnly)
-	float BrokenHitDamage;
-
+	float HitDamage;
+	
 	UPROPERTY(EditDefaultsOnly)
 	float ThrowStrength = 1500.0f;
 
@@ -38,8 +32,8 @@ public:
 	float RotationSpeed = 50.0f;
 
 	UPROPERTY(EditDefaultsOnly)
-	UStaticMesh* UnbrokenVisualMesh;
+	UStaticMesh* VisualMesh;
 
 	UPROPERTY(EditDefaultsOnly)
-	UStaticMesh* BrokenVisualMesh;
+	TArray<TSubclassOf<AActor>> BrokenActors;
 };

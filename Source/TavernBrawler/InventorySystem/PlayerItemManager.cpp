@@ -54,7 +54,7 @@ void UPlayerItemManager::TakeToFight(FVector StartPosition, FVector LookingDirec
 	{
 		if (currentFightItem)
 		{
-			FreeFightingHand();
+			FreeFightingHand(nullptr);
 		}
 		EquipAsFightWeapon(itemToFight);
 		currentFightItem = itemToFight;
@@ -111,7 +111,7 @@ void UPlayerItemManager::EndAttack()
 	currentFightItem->DeactivateOverlap();
 	if (IsFightHandEmpty)
 	{
-		FreeFightingHand();
+		FreeFightingHand(nullptr);
 		if (basicWeaponActor)
 		{
 			GetWorld()->DestroyActor(basicWeaponActor);
@@ -157,14 +157,22 @@ void UPlayerItemManager::EquipAsFightWeapon(AInteractableItem* meleeItem)
 	meleeItem->AttachToComponent(RightHand, FAttachmentTransformRules::SnapToTargetIncludingScale, "hand_r_socket");
 }
 
-void UPlayerItemManager::FreeFightingHand()
+void UPlayerItemManager::FreeFightingHand(AInteractableItem* newItem)
 {
-	if (currentFightItem)
+	if (newItem)
 	{
-		currentFightItem->OnItemBroken.RemoveAll(this);
-		currentFightItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		IsFightHandEmpty = true;
-		currentFightItem = nullptr;	
+		currentFightItem = newItem;
+		EquipAsFightWeapon(newItem);
+	}
+	else
+	{
+		if (currentFightItem)
+		{
+			currentFightItem->OnItemBroken.RemoveAll(this);
+			currentFightItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			IsFightHandEmpty = true;
+			currentFightItem = nullptr;	
+		}	
 	}
 }
 

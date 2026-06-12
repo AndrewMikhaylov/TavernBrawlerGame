@@ -24,6 +24,11 @@ void AInteractableItem::BeginPlay()
 	InitializeItem();
 	hurtMesh->OnComponentHit.AddDynamic(this, &AInteractableItem::DealThrowDamage);
 	hurtMesh->OnComponentBeginOverlap.AddDynamic(this, &AInteractableItem::OnOverlapBegin);
+	visualMesh->SetGenerateOverlapEvents(false);
+	visualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	hurtMesh->SetGenerateOverlapEvents(true);
+	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	CollisionParameters = hurtMesh->GetCollisionResponseToChannels();
 }
 
 // Called every frame
@@ -65,7 +70,9 @@ void AInteractableItem::BeginHitOnOverlap()
 {
 	IsAttacking = true;
 	hurtMesh->SetGenerateOverlapEvents(true);
-	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	hurtMesh->SetCollisionResponseToAllChannels(ECR_Overlap);
+
 }
 
 void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -100,6 +107,8 @@ void AInteractableItem::DeactivateOverlap()
 {
 	IsAttacking = false;
 	hurtMesh->SetGenerateOverlapEvents(false);
+	hurtMesh->SetCollisionResponseToChannels(CollisionParameters);
+	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	if (CurrentDurability==0)
 	{
 		BreakItem();
@@ -108,23 +117,28 @@ void AInteractableItem::DeactivateOverlap()
 
 void AInteractableItem::InitializeItem()
 {
-	visualMesh->SetStaticMesh(ItemData->UnbrokenVisualMesh);
-	CurrentDamage = ItemData->UnbrokenHitDamage;
-	CurrentThrowDamage = ItemData->UnbrokenThrowDamage;
+	visualMesh->SetStaticMesh(ItemData->VisualMesh);
+	CurrentDamage = ItemData->HitDamage;
+	CurrentThrowDamage = ItemData->ThrowDamage;
 	CurrentDurability = ItemData->Durability;
 }
 
 void AInteractableItem::BreakTransformItem()
 {
-	visualMesh->SetStaticMesh(ItemData->BrokenVisualMesh);
-	CurrentDamage = ItemData->BrokenHitDamage;
-	CurrentThrowDamage = ItemData->BrokenThrowDamage;
-	CurrentDurability = 1;
+	FTransform SpawnLocation = GetActorTransform();
+	TArray<AInteractableItem*> Items;
+	 for (const TSubclassOf<AActor>& BrokenItem : ItemData->BrokenActors)
+	 {
+	 	Items.Add(GetWorld()->SpawnActor<AInteractableItem>(BrokenItem, SpawnLocation));
+	 }
+	int32 randomIndex = FMath::FRandRange(0.f,Items.Num()-1);
+	nextItem = Items[randomIndex];
+	BreakItem();
 }
 
 void AInteractableItem::BreakItem()
 {
-	OnItemBroken.Broadcast();
+	OnItemBroken.Broadcast(nextItem);
 	
 	Destroy();
 }

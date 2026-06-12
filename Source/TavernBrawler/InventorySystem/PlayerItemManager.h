@@ -68,6 +68,6 @@ private:
 	AInteractableItem* TakeItem(FVector StartPosition, FVector LookingDirection);
 	void EquipAsThrowWeapon(AInteractableItem* throwableItem);
 	void EquipAsFightWeapon(AInteractableItem* meleeItem);
-	void FreeFightingHand();
+	void FreeFightingHand(AInteractableItem* newItem);
 
 };

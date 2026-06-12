@@ -52,7 +52,7 @@ protected:
 
 public:
 
-	DECLARE_MULTICAST_DELEGATE(FOnItemBroken)
+	DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemBroken, AInteractableItem*)
 	FOnItemBroken OnItemBroken;
 
 	void Throw(FVector Direction);
@@ -69,6 +69,9 @@ private:
 	void InitializeItem();
 	void BreakTransformItem();
 	void BreakItem();
+
+	FCollisionResponseContainer CollisionParameters;
+	AInteractableItem* nextItem;
 
 
 };
