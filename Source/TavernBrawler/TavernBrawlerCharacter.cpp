@@ -58,7 +58,10 @@ ATavernBrawlerCharacter::ATavernBrawlerCharacter()
 
 	PlayerAttacker = CreateDefaultSubobject<UPlayerAttacker>(TEXT("AttackSystem"));
 	PlayerAttacker->AttackEnded.AddUObject(this, &ATavernBrawlerCharacter::StopAttacking);
-	//PlayerAttacker->AttackEnded.AddUObject(this, &ATavernBrawlerCharacter::ResetAttackCooldown);
+
+	ActorHealthSystem = CreateDefaultSubobject<UActorHealthSystem>(TEXT("HealthSystem"));
+	ActorHealthSystem->SetHealth();
+	ActorHealthSystem->ActorDied.AddUObject(this, &ATavernBrawlerCharacter::InitateDeath);
 }
 
 void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -94,6 +97,11 @@ void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	}
 }
 
+void ATavernBrawlerCharacter::InitateDeath()
+{
+	//if player game over if oponent drop current item and die
+}
+
 void ATavernBrawlerCharacter::ResetAttackCooldown()
 {
 	FTimerHandle timer;
@@ -105,6 +113,14 @@ void ATavernBrawlerCharacter::GetReadyToAttack()
 	IsReadyToAttack=true;
 }
 
+
+float ATavernBrawlerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+	class AController* EventInstigator, AActor* DamageCauser)
+{
+	float appliedDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	ActorHealthSystem->TakeDamage(appliedDamage);
+	return appliedDamage;
+}
 
 void ATavernBrawlerCharacter::MoveInput(const FInputActionValue& Value)
 {

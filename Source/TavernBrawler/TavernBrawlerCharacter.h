@@ -7,6 +7,7 @@
 #include "Logging/LogMacros.h"
 #include "InventorySystem/PlayerItemManager.h"
 #include "AttackSystem/PlayerAttacker.h"
+#include "Health/ActorHealthSystem.h"
 #include "TavernBrawlerCharacter.generated.h"
 
 class UInputComponent;
@@ -91,6 +92,9 @@ public:
 
 	UStaticMeshComponent* rightHandSocket;
 
+	UFUNCTION()
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 
 protected:
 
@@ -140,6 +144,11 @@ protected:
 	/** Set up input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	UActorHealthSystem* ActorHealthSystem;	
+	void InitateDeath();
+
+	
 	bool IsReadyToAttack;
 	void ResetAttackCooldown();
 	void GetReadyToAttack();
