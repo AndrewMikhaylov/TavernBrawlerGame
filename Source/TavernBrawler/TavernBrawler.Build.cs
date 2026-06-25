@@ -17,6 +17,7 @@ public class TavernBrawler : ModuleRules
 			"AIModule",
 			"StateTreeModule",
 			"GameplayStateTreeModule",
+			"NavigationSystem",
 			"UMG"
 		});
 

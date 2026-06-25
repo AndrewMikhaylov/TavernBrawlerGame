@@ -69,9 +69,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* TakeWeaponAction;
 
-	UPROPERTY(EditAnywhere, Category = "Inventory")
-	UPlayerItemManager* PlayerInventory;
-
 	UPROPERTY(EditAnywhere, Category = "Attacker")
 	UPlayerAttacker* PlayerAttacker;
 	
@@ -95,8 +92,17 @@ public:
 	UFUNCTION()
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	bool CheckIsAlive();
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void DoThrow();
+
+	UPROPERTY(EditAnywhere, Category = "Inventory")
+	UPlayerItemManager* PlayerInventory;
 
 protected:
+
+	virtual void BeginPlay() override;
 
 	/** Called from Input Actions for movement input */
 	void MoveInput(const FInputActionValue& Value);
@@ -130,9 +136,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void DoTakeWeapon();
-
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void DoThrow();
+	
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void DoHit();

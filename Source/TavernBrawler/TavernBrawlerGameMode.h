@@ -16,6 +16,10 @@ class ATavernBrawlerGameMode : public AGameModeBase
 
 public:
 	ATavernBrawlerGameMode();
+
+	virtual void Tick(float DeltaSeconds) override;
+protected:
+	virtual void BeginPlay() override;
 };
 
 

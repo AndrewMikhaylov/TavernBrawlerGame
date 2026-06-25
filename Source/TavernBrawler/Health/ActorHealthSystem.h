@@ -21,7 +21,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UHealthData* HealthData;
+   
 
 	int GetActorHealth();
 
@@ -35,4 +35,8 @@ public:
 
 	DECLARE_MULTICAST_DELEGATE(FActorDied);
 	FActorDied ActorDied;
+	
+	UPROPERTY(EditAnywhere)
+    	UHealthData* HealthData;
+	bool IsCharacterAlive() const;
 };

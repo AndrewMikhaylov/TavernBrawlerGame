@@ -52,5 +52,14 @@ void UActorHealthSystem::TakeDamage(int damage)
 	}
 }
 
+bool UActorHealthSystem::IsCharacterAlive() const
+{
+	if (CurrentHealth>0)
+	{
+		return true;
+	}
+	return false;
+}
+
 
 

@@ -1,0 +1,35 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "AIController.h"
+#include "TavernBrawlerCharacter.h"
+#include "ItemSystem/InteractableItem.h"
+#include "EnemyAIController.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class TAVERNBRAWLER_API AEnemyAIController : public AAIController
+{
+	GENERATED_BODY()
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	void SetEnemyAI(ATavernBrawlerCharacter* playerCharacter);
+	ATavernBrawlerCharacter* ThisCharacter;
+	ATavernBrawlerCharacter* Player;
+	ATavernBrawlerCharacter* CurrentEnemy;
+
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AInteractableItem> InteractableItem;
+	
+	UPROPERTY(EditAnywhere)
+	UBehaviorTree* BehaviorTree;
+	
+
+};

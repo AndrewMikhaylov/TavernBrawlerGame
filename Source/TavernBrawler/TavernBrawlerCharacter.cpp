@@ -60,7 +60,6 @@ ATavernBrawlerCharacter::ATavernBrawlerCharacter()
 	PlayerAttacker->AttackEnded.AddUObject(this, &ATavernBrawlerCharacter::StopAttacking);
 
 	ActorHealthSystem = CreateDefaultSubobject<UActorHealthSystem>(TEXT("HealthSystem"));
-	ActorHealthSystem->SetHealth();
 	ActorHealthSystem->ActorDied.AddUObject(this, &ATavernBrawlerCharacter::InitateDeath);
 }
 
@@ -89,6 +88,7 @@ void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		EnhancedInputComponent->BindAction(HitAction, ETriggerEvent::Started, this, &ATavernBrawlerCharacter::DoHit);
 		IsReadyToAttack=true;
 
+		
 
 	}
 	else
@@ -120,6 +120,17 @@ float ATavernBrawlerCharacter::TakeDamage(float DamageAmount, struct FDamageEven
 	float appliedDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	ActorHealthSystem->TakeDamage(appliedDamage);
 	return appliedDamage;
+}
+
+bool ATavernBrawlerCharacter::CheckIsAlive()
+{
+	return ActorHealthSystem->IsCharacterAlive();
+}
+
+void ATavernBrawlerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	ActorHealthSystem->SetHealth();
 }
 
 void ATavernBrawlerCharacter::MoveInput(const FInputActionValue& Value)

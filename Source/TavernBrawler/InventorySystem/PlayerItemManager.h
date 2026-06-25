@@ -43,6 +43,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AInteractableItem> BasicWeaponClass;
+	void EquipAsThrowWeapon(AInteractableItem* throwableItem);
 
 protected:
 	UPROPERTY(EditAnywhere, Category="Take")
@@ -66,7 +67,6 @@ private:
 
 	FVector CalculateEndPosition(FVector StartPosition, FVector LookingDirection);
 	AInteractableItem* TakeItem(FVector StartPosition, FVector LookingDirection);
-	void EquipAsThrowWeapon(AInteractableItem* throwableItem);
 	void EquipAsFightWeapon(AInteractableItem* meleeItem);
 	void FreeFightingHand(AInteractableItem* newItem);
 
