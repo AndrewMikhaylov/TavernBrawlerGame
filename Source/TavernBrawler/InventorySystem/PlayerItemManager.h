@@ -27,6 +27,8 @@ public:
 
 public:
 	void TakeToThrow(FVector StartPosition, FVector LookingDirection);
+	void TakeToThrow(AInteractableItem* itemToThrow);
+
 
 	void TakeToFight(FVector StartPosition, FVector LookingDirection);
 

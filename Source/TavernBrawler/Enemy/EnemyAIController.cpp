@@ -3,6 +3,8 @@
 
 #include "Enemy/EnemyAIController.h"
 
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void AEnemyAIController::BeginPlay()
@@ -17,5 +19,16 @@ void AEnemyAIController::SetEnemyAI(ATavernBrawlerCharacter* playerCharacter)
 	ThisCharacter = Cast<ATavernBrawlerCharacter>(GetPawn());
 	RunBehaviorTree(BehaviorTree);
 
+}
+
+void AEnemyAIController::SetIsDead()
+{
+	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
+	BlackboardComponent->SetValueAsBool(TEXT("IsAlive"), false);
+}
+
+void AEnemyAIController::Attack()
+{
+	bIsAttacking = true;
 }
 

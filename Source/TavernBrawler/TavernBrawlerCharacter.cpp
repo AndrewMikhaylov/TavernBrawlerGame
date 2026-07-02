@@ -7,6 +7,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
+#include "Enemy/EnemyAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -100,6 +101,11 @@ void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 void ATavernBrawlerCharacter::InitateDeath()
 {
 	//if player game over if oponent drop current item and die
+	AEnemyAIController* AIController = Cast<AEnemyAIController>(GetController());
+	if (AIController)
+	{
+		AIController->SetIsDead();
+	}
 }
 
 void ATavernBrawlerCharacter::ResetAttackCooldown()

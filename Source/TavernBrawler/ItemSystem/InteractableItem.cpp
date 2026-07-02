@@ -3,6 +3,9 @@
 
 #include "ItemSystem/InteractableItem.h"
 
+#include "TavernBrawlerCharacter.h"
+#include "Engine/DamageEvents.h"
+
 // Sets default values
 AInteractableItem::AInteractableItem()
 {
@@ -43,7 +46,15 @@ void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 {
 	if (IsAttacking)
 	{
-		//deal damage
+		FPointDamageEvent DamageEvent;
+		ATavernBrawlerCharacter* damageReceiver = Cast<ATavernBrawlerCharacter>(OtherActor);
+		if (damageReceiver)
+		{
+			damageReceiver->TakeDamage(ItemData->HitDamage,
+				DamageEvent,
+				GetOwner()->GetInstigatorController(),
+				this);	
+		}
 		CurrentDurability--;
 		if (CurrentDurability == 1)
 		{
@@ -80,7 +91,15 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 {
 	if (IsThrown)
 	{
-		//deal damage
+		FPointDamageEvent DamageEvent;
+		ATavernBrawlerCharacter* damageReceiver = Cast<ATavernBrawlerCharacter>(OtherActor);
+		if (damageReceiver)
+		{
+			damageReceiver->TakeDamage(ItemData->HitDamage,
+				DamageEvent,
+				GetOwner()->GetInstigatorController(),
+				this);	
+		}
 		if (CurrentDurability > 1)
 		{
 			CurrentDurability = 1;

@@ -20,16 +20,19 @@ protected:
 
 public:
 	void SetEnemyAI(ATavernBrawlerCharacter* playerCharacter);
+	void SetIsDead();
 	ATavernBrawlerCharacter* ThisCharacter;
 	ATavernBrawlerCharacter* Player;
 	ATavernBrawlerCharacter* CurrentEnemy;
-
-
+	
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsAttacking;
+	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AInteractableItem> InteractableItem;
 	
 	UPROPERTY(EditAnywhere)
 	UBehaviorTree* BehaviorTree;
 	
-
+	void Attack();
 };

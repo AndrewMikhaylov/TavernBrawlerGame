@@ -1,8 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
+#include "TavernBrawlerGameMode.h"
 #include "TavernBrawlerCharacter.h"
 #include "Enemy/EnemyAIController.h"
 #include "Kismet/GameplayStatics.h"
-#include "TavernBrawlerGameMode.h"
+
 
 ATavernBrawlerGameMode::ATavernBrawlerGameMode()
 {

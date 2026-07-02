@@ -23,15 +23,15 @@ EBTNodeResult::Type UThrowItemAtEnemy::ExecuteTask(UBehaviorTreeComponent& Owner
 	}
 	ATavernBrawlerCharacter* ThisCharacter = AIController->ThisCharacter;
 	ATavernBrawlerCharacter* EnemyCharacter = AIController->CurrentEnemy;
-	if (EnemyCharacter->CheckIsAlive())
+	AIController->SetFocalPoint(EnemyCharacter->GetActorLocation());
+	if (EnemyCharacter->CheckIsAlive() && EnemyCharacter)
 	{
-		AIController->SetFocus(EnemyCharacter);
-		AActor* weapon = GetWorld()->SpawnActor(AIController->InteractableItem);
-		ThisCharacter->PlayerInventory->EquipAsThrowWeapon(Cast<AInteractableItem>(weapon));
+		AInteractableItem* weapon = Cast<AInteractableItem>(GetWorld()->SpawnActor(AIController->InteractableItem));
+		ThisCharacter->PlayerInventory->TakeToThrow(weapon);
+		ThisCharacter->PlayerInventory->EquipAsThrowWeapon(weapon);
+		AIController->Attack();
 		ThisCharacter->DoThrow();
 	}
-
-	AIController->ClearFocus(EAIFocusPriority::Gameplay);
-
+	
 	return EBTNodeResult::Succeeded;
 }

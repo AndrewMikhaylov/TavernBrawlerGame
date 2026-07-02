@@ -1,9 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "EnemyAIController.h"
-
 #include "Enemy/UpdateEnemyPosition.h"
-
+#include "EnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UUpdateEnemyPosition::UUpdateEnemyPosition()

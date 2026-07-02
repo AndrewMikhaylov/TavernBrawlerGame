@@ -19,16 +19,20 @@ EBTNodeResult::Type USearchForEnemy::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 
 	UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	TArray<AActor*> enemiesAround;
+
+	APawn* thisEnemyAIPawn = OwnerComp.GetAIOwner()->GetPawn();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATavernBrawlerCharacter::StaticClass(), enemiesAround);
 	if (enemiesAround.Num() > 0)
 	{
 		float searchDistance = BlackboardComponent->GetValueAsFloat(SearchRadius.SelectedKeyName);
 		for (auto nextEnemy : enemiesAround)
 		{
-			if (FVector::Distance(nextEnemy->GetActorLocation(), OwnerComp.GetAIOwner()->GetPawn()->GetActorLocation())<=searchDistance)
+			if (FVector::Distance(nextEnemy->GetActorLocation(), thisEnemyAIPawn->GetActorLocation())<=searchDistance
+				&& nextEnemy!=thisEnemyAIPawn)
 			{
 				AEnemyAIController* thisEnemyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 				thisEnemyController->CurrentEnemy = Cast<ATavernBrawlerCharacter>(nextEnemy);
+				BlackboardComponent->SetValueAsObject(CurrentEnemy.SelectedKeyName, nextEnemy);
 				return EBTNodeResult::Succeeded;	
 			}
 		}

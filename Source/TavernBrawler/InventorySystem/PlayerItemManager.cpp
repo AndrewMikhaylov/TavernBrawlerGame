@@ -47,6 +47,19 @@ void UPlayerItemManager::TakeToThrow(FVector StartPosition, FVector LookingDirec
 	}
 }
 
+void UPlayerItemManager::TakeToThrow(AInteractableItem* itemToThrow)
+{
+	if (IsThrowHandEmpty)
+	{
+		if (itemToThrow)
+		{
+			IsThrowHandEmpty = false;
+			EquipAsThrowWeapon(itemToThrow);
+			currentThrowItem = itemToThrow;
+		}
+	}
+}
+
 void UPlayerItemManager::TakeToFight(FVector StartPosition, FVector LookingDirection)
 {
 	AInteractableItem* itemToFight = TakeItem(StartPosition, LookingDirection);
