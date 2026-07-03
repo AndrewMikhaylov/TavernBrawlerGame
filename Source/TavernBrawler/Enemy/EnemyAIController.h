@@ -27,6 +27,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsAttacking;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsReadyToFight = false;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AInteractableItem> InteractableItem;
@@ -35,4 +38,5 @@ public:
 	UBehaviorTree* BehaviorTree;
 	
 	void Attack();
+	void SetReadyToFight();
 };

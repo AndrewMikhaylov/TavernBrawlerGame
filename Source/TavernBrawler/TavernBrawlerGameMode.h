@@ -18,8 +18,14 @@ public:
 	ATavernBrawlerGameMode();
 
 	virtual void Tick(float DeltaSeconds) override;
+
+	void BeginFight();
 protected:
 	virtual void BeginPlay() override;
+	TArray<AActor*> Enemies;
+	TArray<AActor*> TavernFighters;
+	bool bFightStarted = false;
+
 };
 
 

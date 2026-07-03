@@ -92,6 +92,9 @@ public:
 	UFUNCTION()
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	DECLARE_MULTICAST_DELEGATE(FOnFirstDamageTaken)
+	FOnFirstDamageTaken OnFirstDamageTaken;
+
 	bool CheckIsAlive();
 
 	UFUNCTION(BlueprintCallable, Category = "Input")

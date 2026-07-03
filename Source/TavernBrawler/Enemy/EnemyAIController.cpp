@@ -32,3 +32,8 @@ void AEnemyAIController::Attack()
 	bIsAttacking = true;
 }
 
+void AEnemyAIController::SetReadyToFight()
+{
+	bIsReadyToFight = true;
+}
+

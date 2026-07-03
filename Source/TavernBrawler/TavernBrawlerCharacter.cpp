@@ -124,6 +124,7 @@ float ATavernBrawlerCharacter::TakeDamage(float DamageAmount, struct FDamageEven
 	class AController* EventInstigator, AActor* DamageCauser)
 {
 	float appliedDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	OnFirstDamageTaken.Broadcast();
 	ActorHealthSystem->TakeDamage(appliedDamage);
 	return appliedDamage;
 }

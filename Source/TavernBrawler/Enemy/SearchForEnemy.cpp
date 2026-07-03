@@ -19,10 +19,10 @@ EBTNodeResult::Type USearchForEnemy::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 
 	UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	TArray<AActor*> enemiesAround;
-
-	APawn* thisEnemyAIPawn = OwnerComp.GetAIOwner()->GetPawn();
+	AEnemyAIController* AIController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
+	APawn* thisEnemyAIPawn = AIController->GetPawn();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATavernBrawlerCharacter::StaticClass(), enemiesAround);
-	if (enemiesAround.Num() > 0)
+	if (enemiesAround.Num() > 0 && AIController->bIsReadyToFight)
 	{
 		float searchDistance = BlackboardComponent->GetValueAsFloat(SearchRadius.SelectedKeyName);
 		for (auto nextEnemy : enemiesAround)
