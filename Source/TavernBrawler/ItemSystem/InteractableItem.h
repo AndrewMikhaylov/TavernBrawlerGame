@@ -63,15 +63,17 @@ public:
 	void DealThrowDamage(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		FVector NormalImpulse, const FHitResult& Hit);
 
-	void PickUp();
+	void PickUp(AActor* ItemOwner);
 	void DeactivateOverlap();
 private:
 	void InitializeItem();
 	void BreakTransformItem();
 	void BreakItem();
-
+	
+	AActor* ThisItemOwner;
 	FCollisionResponseContainer CollisionParameters;
 	AInteractableItem* nextItem;
+	TArray<AActor*> ActorsHit;
 
 
 };

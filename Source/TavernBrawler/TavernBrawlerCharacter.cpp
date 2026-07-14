@@ -7,6 +7,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
+#include "TavernBrawlerPlayerController.h"
 #include "Enemy/EnemyAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -89,8 +90,6 @@ void ATavernBrawlerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		EnhancedInputComponent->BindAction(HitAction, ETriggerEvent::Started, this, &ATavernBrawlerCharacter::DoHit);
 		IsReadyToAttack=true;
 
-		
-
 	}
 	else
 	{
@@ -105,6 +104,11 @@ void ATavernBrawlerCharacter::InitateDeath()
 	if (AIController)
 	{
 		AIController->SetIsDead();
+	}
+	else
+	{
+		APlayerController* playerController = Cast<APlayerController>(GetController());
+		DisableInput(playerController);
 	}
 }
 
@@ -125,7 +129,9 @@ float ATavernBrawlerCharacter::TakeDamage(float DamageAmount, struct FDamageEven
 {
 	float appliedDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	OnFirstDamageTaken.Broadcast();
+	UE_LOG(LogTemp, Warning, TEXT("DamageTaken"));
 	ActorHealthSystem->TakeDamage(appliedDamage);
+	UpdateHUD();
 	return appliedDamage;
 }
 
@@ -142,6 +148,7 @@ void ATavernBrawlerCharacter::BeginPlay()
 
 void ATavernBrawlerCharacter::MoveInput(const FInputActionValue& Value)
 {
+	
 	// get the Vector2D move axis
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -259,4 +266,13 @@ void ATavernBrawlerCharacter::StopAttacking()
 {
 	PlayerInventory->EndAttack();
 	ResetAttackCooldown();
+}
+
+void ATavernBrawlerCharacter::UpdateHUD()
+{
+	ATavernBrawlerPlayerController* PlayerController = Cast<ATavernBrawlerPlayerController>(GetController());
+	if (PlayerController)
+	{
+		PlayerController->HUDWidget->SetHealthBarPercent(ActorHealthSystem->GetHealthPercentage());
+	}
 }

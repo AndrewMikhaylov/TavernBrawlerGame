@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "UI/HUDWidget.h"
 #include "TavernBrawlerPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -22,7 +23,8 @@ public:
 
 	/** Constructor */
 	ATavernBrawlerPlayerController();
-
+	UPROPERTY(VisibleAnywhere)
+	UHUDWidget* HUDWidget;
 protected:
 
 	/** Input Mapping Contexts */
@@ -32,4 +34,9 @@ protected:
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
 
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UHUDWidget> HUDWidgetClass;
+	
 };

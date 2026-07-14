@@ -44,7 +44,7 @@ void AInteractableItem::Tick(float DeltaTime)
 void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (IsAttacking)
+	if (IsAttacking && !ActorsHit.Contains(OtherActor))
 	{
 		FPointDamageEvent DamageEvent;
 		ATavernBrawlerCharacter* damageReceiver = Cast<ATavernBrawlerCharacter>(OtherActor);
@@ -52,7 +52,7 @@ void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 		{
 			damageReceiver->TakeDamage(ItemData->HitDamage,
 				DamageEvent,
-				GetOwner()->GetInstigatorController(),
+				ThisItemOwner->GetInstigatorController(),
 				this);	
 		}
 		CurrentDurability--;
@@ -60,6 +60,7 @@ void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 		{
 			BreakTransformItem();
 		}
+		ActorsHit.Add(OtherActor);
 	}
 }
 
@@ -69,17 +70,18 @@ void AInteractableItem::Throw(FVector Direction)
 	hurtMesh->SetSimulatePhysics(true);
 	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	hurtMesh->SetNotifyRigidBodyCollision(true);
-
-	FVector ThrowDirection = Direction + FVector(0.0f, 0.0f, 0.4f);
+	FVector ThrowDirection = Direction + 
+			ThisItemOwner->GetActorRightVector()*0.2 +
+			ThisItemOwner->GetActorUpVector()*0.2;
 	ThrowDirection.Normalize();
 	hurtMesh->AddImpulse(ThrowDirection*ItemData->ThrowStrength, NAME_None, true);
-
 }
 
 
 void AInteractableItem::BeginHitOnOverlap()
 {
 	IsAttacking = true;
+	ActorsHit.Empty();
 	hurtMesh->SetGenerateOverlapEvents(true);
 	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	hurtMesh->SetCollisionResponseToAllChannels(ECR_Overlap);
@@ -95,9 +97,9 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 		ATavernBrawlerCharacter* damageReceiver = Cast<ATavernBrawlerCharacter>(OtherActor);
 		if (damageReceiver)
 		{
-			damageReceiver->TakeDamage(ItemData->HitDamage,
+			damageReceiver->TakeDamage(ItemData->ThrowDamage,
 				DamageEvent,
-				GetOwner()->GetInstigatorController(),
+				ThisItemOwner->GetInstigatorController(),
 				this);	
 		}
 		if (CurrentDurability > 1)
@@ -109,16 +111,18 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 		{
 			BreakItem();
 		}
-			IsThrown = false;
-
+		IsThrown = false;
+		ThisItemOwner=nullptr;
+	
 	hurtMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 	hurtMesh->SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
 
 	}
 }
 
-void AInteractableItem::PickUp()
+void AInteractableItem::PickUp(AActor* ItemOwner)
 {
+	ThisItemOwner = ItemOwner;
 	hurtMesh->SetSimulatePhysics(false);
 }
 
@@ -157,6 +161,7 @@ void AInteractableItem::BreakTransformItem()
 
 void AInteractableItem::BreakItem()
 {
+	ThisItemOwner = nullptr;
 	OnItemBroken.Broadcast(nextItem);
 	
 	Destroy();

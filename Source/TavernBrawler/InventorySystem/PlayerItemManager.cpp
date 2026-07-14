@@ -159,14 +159,14 @@ AInteractableItem* UPlayerItemManager::TakeItem(FVector StartPosition, FVector L
 void UPlayerItemManager::EquipAsThrowWeapon(AInteractableItem* throwableItem)
 {
 
-	throwableItem->PickUp();
+	throwableItem->PickUp(GetOwner());
 	throwableItem->AttachToComponent(LeftHand, FAttachmentTransformRules::SnapToTargetIncludingScale, "hand_l_socket");
 }
 
 void UPlayerItemManager::EquipAsFightWeapon(AInteractableItem* meleeItem)
 {
 
-	meleeItem->PickUp();
+	meleeItem->PickUp(GetOwner());
 	meleeItem->AttachToComponent(RightHand, FAttachmentTransformRules::SnapToTargetIncludingScale, "hand_r_socket");
 }
 

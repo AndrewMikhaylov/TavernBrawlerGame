@@ -23,8 +23,9 @@ void AEnemyAIController::SetEnemyAI(ATavernBrawlerCharacter* playerCharacter)
 
 void AEnemyAIController::SetIsDead()
 {
+	bIsDead=true;
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
-	BlackboardComponent->SetValueAsBool(TEXT("IsAlive"), false);
+	BlackboardComponent->SetValueAsBool(TEXT("IsDead"), true);
 }
 
 void AEnemyAIController::Attack()

@@ -26,3 +26,15 @@ void ATavernBrawlerPlayerController::SetupInputComponent()
 		}
 	}
 }
+
+void ATavernBrawlerPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	HUDWidget = CreateWidget<UHUDWidget>(this, HUDWidgetClass);
+	if (HUDWidget)
+	{
+		HUDWidget->AddToViewport();
+	}
+	
+}

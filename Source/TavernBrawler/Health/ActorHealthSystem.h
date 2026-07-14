@@ -23,14 +23,15 @@ protected:
 
    
 
-	int GetActorHealth();
+	float GetActorHealth();
 
-	int CurrentHealth;
+	float CurrentHealth;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	void SetHealth();
+	float GetHealthPercentage();
 	void TakeDamage(int damage);
 
 	DECLARE_MULTICAST_DELEGATE(FActorDied);

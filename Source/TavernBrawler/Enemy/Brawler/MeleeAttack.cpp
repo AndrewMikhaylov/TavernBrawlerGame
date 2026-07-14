@@ -25,12 +25,14 @@ EBTNodeResult::Type UMeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	if (thisEnemyController && currentEnemy)
 	{
 		thisEnemyController->SetFocalPoint(currentEnemy->GetActorLocation());
-		float distanceBetweenEnemies = FVector::Distance(currentEnemy->GetActorLocation(), thisEnemyController->ThisCharacter->GetActorLocation());
+		FVector currentEnemyLocation = currentEnemy->GetActorLocation();
+		FVector thisControllerLocation = thisEnemyController->ThisCharacter->GetActorLocation();
+		float distanceBetweenEnemies = FVector::Distance(currentEnemyLocation, thisControllerLocation);
 		FVector AIForward = thisEnemyController->GetPawn()->GetActorForwardVector();
-		FVector AIToEnemy = (currentEnemy->GetActorLocation() - thisEnemyController->GetPawn()->GetActorForwardVector()).GetSafeNormal();
+		FVector AIToEnemy = (currentEnemyLocation - thisEnemyController->GetPawn()->GetActorForwardVector()).GetSafeNormal();
 		float angle = FVector::DotProduct(AIForward, AIToEnemy);
 		thisEnemyController->bIsAttacking = true;
-		if (distanceBetweenEnemies<=BlackboardComponent->GetValueAsFloat(AttackRange.SelectedKeyName) && angle<=1 && angle>=0.7)
+		if (distanceBetweenEnemies<=BlackboardComponent->GetValueAsFloat(AttackRange.SelectedKeyName) && angle<=1 && angle>=0.6)
 		{
 			FPointDamageEvent DamageEvent;
 			currentEnemy->TakeDamage(BlackboardComponent->GetValueAsFloat(AttackDamage.SelectedKeyName),

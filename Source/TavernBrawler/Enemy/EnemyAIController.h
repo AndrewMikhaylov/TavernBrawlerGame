@@ -30,6 +30,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsReadyToFight = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsDead = false;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AInteractableItem> InteractableItem;

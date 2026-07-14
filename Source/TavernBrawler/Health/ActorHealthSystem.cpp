@@ -32,7 +32,7 @@ void UActorHealthSystem::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// ...
 }
 
-int UActorHealthSystem::GetActorHealth()
+float UActorHealthSystem::GetActorHealth()
 {
 	return HealthData->Health;
 }
@@ -40,6 +40,11 @@ int UActorHealthSystem::GetActorHealth()
 void UActorHealthSystem::SetHealth()
 {
 	CurrentHealth = GetActorHealth();
+}
+
+float UActorHealthSystem::GetHealthPercentage()
+{
+	return CurrentHealth/GetActorHealth();
 }
 
 void UActorHealthSystem::TakeDamage(int damage)

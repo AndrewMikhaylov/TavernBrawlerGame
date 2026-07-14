@@ -146,6 +146,8 @@ protected:
 
 	void StopAttacking();
 
+	void UpdateHUD();
+
 protected:
 
 	/** Set up input action bindings */
