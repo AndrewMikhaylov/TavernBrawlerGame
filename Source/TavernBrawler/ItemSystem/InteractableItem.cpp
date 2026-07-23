@@ -105,11 +105,10 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 		if (CurrentDurability > 1)
 		{
 			CurrentDurability = 1;
-			BreakTransformItem();
 		}
 		else
 		{
-			BreakItem();
+			BreakTransformItem();
 		}
 		IsThrown = false;
 		ThisItemOwner=nullptr;
@@ -150,12 +149,16 @@ void AInteractableItem::BreakTransformItem()
 {
 	FTransform SpawnLocation = GetActorTransform();
 	TArray<AInteractableItem*> Items;
-	 for (const TSubclassOf<AActor>& BrokenItem : ItemData->BrokenActors)
-	 {
-	 	Items.Add(GetWorld()->SpawnActor<AInteractableItem>(BrokenItem, SpawnLocation));
-	 }
-	int32 randomIndex = FMath::FRandRange(0.f,Items.Num()-1);
-	nextItem = Items[randomIndex];
+	if (ItemData->BrokenActors.Num()>=1)
+	{
+		for (const TSubclassOf<AActor>& BrokenItem : ItemData->BrokenActors)
+		{
+			Items.Add(GetWorld()->SpawnActor<AInteractableItem>(BrokenItem, SpawnLocation));
+			//add them flying in different directions
+		}
+		int32 randomIndex = FMath::FRandRange(0.f,Items.Num()-1);
+		nextItem = Items[randomIndex];	
+	}
 	BreakItem();
 }
 

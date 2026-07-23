@@ -107,8 +107,7 @@ void ATavernBrawlerCharacter::InitateDeath()
 	}
 	else
 	{
-		APlayerController* playerController = Cast<APlayerController>(GetController());
-		DisableInput(playerController);
+		OnPlayerDead.Broadcast();
 	}
 }
 
@@ -127,12 +126,15 @@ void ATavernBrawlerCharacter::GetReadyToAttack()
 float ATavernBrawlerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 	class AController* EventInstigator, AActor* DamageCauser)
 {
-	float appliedDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	OnFirstDamageTaken.Broadcast();
-	UE_LOG(LogTemp, Warning, TEXT("DamageTaken"));
-	ActorHealthSystem->TakeDamage(appliedDamage);
-	UpdateHUD();
-	return appliedDamage;
+	if (CheckIsAlive())
+	{
+		float appliedDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+		OnFirstDamageTaken.Broadcast();
+		UE_LOG(LogTemp, Warning, TEXT("DamageTaken"));
+		ActorHealthSystem->TakeDamage(appliedDamage);
+		UpdateHUD();
+	}
+	return DamageAmount;
 }
 
 bool ATavernBrawlerCharacter::CheckIsAlive()

@@ -95,6 +95,9 @@ public:
 	DECLARE_MULTICAST_DELEGATE(FOnFirstDamageTaken)
 	FOnFirstDamageTaken OnFirstDamageTaken;
 
+	DECLARE_MULTICAST_DELEGATE(FOnPlayerDead)
+	FOnPlayerDead OnPlayerDead;
+
 	bool CheckIsAlive();
 
 	UFUNCTION(BlueprintCallable, Category = "Input")

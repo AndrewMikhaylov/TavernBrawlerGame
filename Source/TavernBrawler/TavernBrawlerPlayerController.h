@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "UI/HUDEndGameWidget.h"
 #include "UI/HUDWidget.h"
 #include "TavernBrawlerPlayerController.generated.h"
 
@@ -25,6 +26,10 @@ public:
 	ATavernBrawlerPlayerController();
 	UPROPERTY(VisibleAnywhere)
 	UHUDWidget* HUDWidget;
+
+	void ActivateWinMenu();
+	void ActivateLoseMenu();
+	void DisablePlayerHUD();
 protected:
 
 	/** Input Mapping Contexts */
@@ -38,5 +43,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UHUDWidget> HUDWidgetClass;
-	
+
+	UHUDEndGameWidget* HUDWidgetEndScreen;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UHUDEndGameWidget> HUDWidgetWin;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UHUDEndGameWidget> HUDWidgetLose;
 };

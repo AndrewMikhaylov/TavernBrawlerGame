@@ -27,8 +27,9 @@ EBTNodeResult::Type USearchForEnemy::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 		float searchDistance = BlackboardComponent->GetValueAsFloat(SearchRadius.SelectedKeyName);
 		for (auto nextEnemy : enemiesAround)
 		{
-			if (FVector::Distance(nextEnemy->GetActorLocation(), thisEnemyAIPawn->GetActorLocation())<=searchDistance
-				&& nextEnemy!=thisEnemyAIPawn)
+			ATavernBrawlerCharacter* nextBrawlerCharacter = Cast<ATavernBrawlerCharacter>(nextEnemy);
+			if (FVector::Distance(nextBrawlerCharacter->GetActorLocation(), thisEnemyAIPawn->GetActorLocation())<=searchDistance
+				&& nextEnemy!=thisEnemyAIPawn && nextBrawlerCharacter->CheckIsAlive())
 			{
 				AEnemyAIController* thisEnemyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 				thisEnemyController->CurrentEnemy = Cast<ATavernBrawlerCharacter>(nextEnemy);

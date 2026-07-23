@@ -39,6 +39,9 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	UBehaviorTree* BehaviorTree;
+
+	DECLARE_MULTICAST_DELEGATE(OnAiDead)
+	OnAiDead OnAiDeadDelegate;
 	
 	void Attack();
 	void SetReadyToFight();

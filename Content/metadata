@@ -1,0 +1,102 @@
+{
+	"assetNamespace": "fab",
+	"listing":
+	{
+		"averageRating": 3.3300000000000001,
+		"createdAt": "",
+		"description": "<p>Modular assets pack Include-</p>\n<p>3 variations of the  pillars, walls and door openings,</p>\n<p>Throne, Wooden crate, Wooden Barrel &amp; Flame Torch with Emission.</p>\n<p>*all the assets are separate objects with their respective material shaders.</p>\n<p>Do checkout my Portfolio at- <a target=\"_blank\" href=\"https://bridjagtap7.artstation.com\" rel=\"noopener noreferrer nofollow\">https://bridjagtap7.artstation.com</a></p>",
+		"isAiForbidden": true,
+		"isAiGenerated": false,
+		"lastUpdatedAt": "",
+		"listingType": "3d-model",
+		"media": "https://media.fab.com/image_previews/gallery_images/0994d059-b5cc-4aeb-a2d1-925098611bc5/3abd3c0e-6826-4004-ad0d-f7b3cd1401d5.jpeg",
+		"publishedAt": "2024-11-22T00:22:15.702961Z",
+		"reviewCount": 3,
+		"thumbnail": "https://media.fab.com/image_previews/gallery_images/662f55de-974b-43f4-a0fe-b6dbfc23722c/6c0ece09-5e5b-44b3-8f5d-506a075a408c.jpeg",
+		"title": "Low-poly Game Assets: Modular Dungeon Pack",
+		"uid": "cff74211-c780-4a60-90fc-ffbc549035e5",
+		"updatedAt": "",
+		"user":
+		{
+			"coverImageUrl": "",
+			"profileImageUrl": "",
+			"sellerName": "Brid Jagtap",
+			"uid": "750e0c08-86d2-4164-b601-d61d3fdd530b"
+		},
+		"tags": [
+			{
+				"name": "Blender",
+				"slug": "blender",
+				"uid": "141666cf-0a09-4718-85fa-f0d54884a525"
+			},
+			{
+				"name": "Modular",
+				"slug": "modular",
+				"uid": "3f9ccd49-dae7-45e2-bdb6-9e288855da06"
+			},
+			{
+				"name": "Lowpoly",
+				"slug": "lowpoly",
+				"uid": "451806dc-649e-43b7-9c2e-a54485de14b6"
+			},
+			{
+				"name": "Dungeon",
+				"slug": "dungeon",
+				"uid": "73ebba2f-76d3-4758-ba98-4fc7dc7570c0"
+			}
+		],
+		"category":
+		{
+			"name": "Buildings & Architecture",
+			"path": "buildings-architecture",
+			"slug": "buildings-architecture",
+			"uid": "eec3bdd5-ba7a-45a8-b15d-67462b9630f6"
+		},
+		"assetFormats": [
+			{
+				"assetFormatType":
+				{
+					"name": "FBX",
+					"groupName": "3D Exchange Formats",
+					"code": "fbx",
+					"icon": "cube",
+					"extensions": [
+						"fbx"
+					]
+				}
+			},
+			{
+				"assetFormatType":
+				{
+					"name": "Converted Files",
+					"groupName": "",
+					"code": "converted-files",
+					"icon": "cube",
+					"extensions": [
+						"gltf",
+						"glb",
+						"usdz"
+					]
+				}
+			}
+		],
+		"_PluginMetas":
+		{
+			"apiDataVersion": "0.0.1",
+			"entitlementUid": "",
+			"cacheSize": 0,
+			"downloaded": []
+		}
+	},
+	"target": "",
+	"quality": "",
+	"format": "fbx",
+	"fileId": "1e2659fc-e147-499c-8f47-0f4feb0aa454",
+	"platformIncluded": "",
+	"distributionPointBaseUrls": [],
+	"distributionMethod": "",
+	"entitlementUid": "",
+	"invertedNormal": false,
+	"isConverted": false,
+	"isQuixel": false
+}

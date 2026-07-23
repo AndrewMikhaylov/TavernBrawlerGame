@@ -26,6 +26,7 @@ void AEnemyAIController::SetIsDead()
 	bIsDead=true;
 	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
 	BlackboardComponent->SetValueAsBool(TEXT("IsDead"), true);
+	OnAiDeadDelegate.Broadcast();
 }
 
 void AEnemyAIController::Attack()

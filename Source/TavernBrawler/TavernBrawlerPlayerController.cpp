@@ -31,6 +31,9 @@ void ATavernBrawlerPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bShowMouseCursor = false;
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
 	HUDWidget = CreateWidget<UHUDWidget>(this, HUDWidgetClass);
 	if (HUDWidget)
 	{
@@ -38,3 +41,28 @@ void ATavernBrawlerPlayerController::BeginPlay()
 	}
 	
 }
+
+void ATavernBrawlerPlayerController::ActivateWinMenu()
+{
+	HUDWidgetEndScreen = CreateWidget<UHUDEndGameWidget>(this, HUDWidgetWin);
+	if (HUDWidgetEndScreen)
+	{
+		HUDWidgetEndScreen->AddToViewport();
+	}
+}
+
+void ATavernBrawlerPlayerController::ActivateLoseMenu()
+{
+	HUDWidgetEndScreen = CreateWidget<UHUDEndGameWidget>(this, HUDWidgetLose);
+	if (HUDWidgetEndScreen)
+	{
+		HUDWidgetEndScreen->AddToViewport();
+	}
+}
+
+void ATavernBrawlerPlayerController::DisablePlayerHUD()
+{
+	HUDWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+
