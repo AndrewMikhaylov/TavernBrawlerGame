@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "ItemSystem/ItemData.h"
@@ -27,9 +28,10 @@ public:
 
 
 protected:
+	
 	UPROPERTY(VisibleAnywhere)
-	UCapsuleComponent* hurtMesh;
-
+	UBoxComponent* hurtMesh;
+	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* visualMesh;
 	

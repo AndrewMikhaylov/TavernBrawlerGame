@@ -12,9 +12,8 @@ AInteractableItem::AInteractableItem()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	hurtMesh = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HurtBox"));
+	hurtMesh = CreateDefaultSubobject<UBoxComponent>(TEXT("HurtBox"));
 	SetRootComponent(hurtMesh);
-	hurtMesh->SetNotifyRigidBodyCollision(true);
 	visualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
 	visualMesh->SetupAttachment(hurtMesh);
 }
@@ -30,6 +29,7 @@ void AInteractableItem::BeginPlay()
 	visualMesh->SetGenerateOverlapEvents(false);
 	visualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	hurtMesh->SetGenerateOverlapEvents(true);
+	hurtMesh->SetNotifyRigidBodyCollision(true);
 	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionParameters = hurtMesh->GetCollisionResponseToChannels();
 }
@@ -56,10 +56,7 @@ void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 				this);	
 		}
 		CurrentDurability--;
-		if (CurrentDurability == 1)
-		{
-			BreakTransformItem();
-		}
+
 		ActorsHit.Add(OtherActor);
 	}
 }
@@ -123,6 +120,7 @@ void AInteractableItem::PickUp(AActor* ItemOwner)
 {
 	ThisItemOwner = ItemOwner;
 	hurtMesh->SetSimulatePhysics(false);
+	hurtMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AInteractableItem::DeactivateOverlap()
@@ -133,7 +131,7 @@ void AInteractableItem::DeactivateOverlap()
 	hurtMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	if (CurrentDurability==0)
 	{
-		BreakItem();
+		BreakTransformItem();
 	}
 }
 
