@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PoolableObject.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
@@ -10,7 +11,7 @@
 #include "InteractableItem.generated.h"
 
 UCLASS()
-class TAVERNBRAWLER_API AInteractableItem : public AActor
+class TAVERNBRAWLER_API AInteractableItem : public APoolableObject
 {
 	GENERATED_BODY()
 	
