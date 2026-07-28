@@ -3,6 +3,8 @@
 
 #include "PoolableObject.h"
 
+#include "SkeletonTreeBuilder.h"
+
 // Sets default values
 APoolableObject::APoolableObject()
 {
@@ -10,6 +12,30 @@ APoolableObject::APoolableObject()
 	PrimaryActorTick.bCanEverTick = true;
 
 }
+
+int APoolableObject::GetIndex()
+{
+	return Index;
+}
+
+bool APoolableObject::CheckIsActive()
+{
+	return IsActive;
+}
+
+void APoolableObject::SetIndex(int index)
+{
+	Index = index;
+}
+
+void APoolableObject::Activate(bool isActive)
+{
+	IsActive = isActive;
+	SetActorHiddenInGame(!isActive);
+	SetActorEnableCollision(isActive);
+	SetActorTickEnabled(isActive);
+}
+
 
 // Called when the game starts or when spawned
 void APoolableObject::BeginPlay()

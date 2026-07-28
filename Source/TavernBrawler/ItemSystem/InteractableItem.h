@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PoolableObject.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "ItemSystem/ItemData.h"
+#include "World/ObjectPool/PoolableObject.h"
 #include "InteractableItem.generated.h"
 
 UCLASS()

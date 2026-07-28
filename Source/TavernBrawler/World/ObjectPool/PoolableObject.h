@@ -15,10 +15,21 @@ public:
 	// Sets default values for this actor's properties
 	APoolableObject();
 	
+	UPROPERTY(EditAnywhere)
+	FString Name;
+	
+	int GetIndex();
+	bool CheckIsActive();
+	void SetIndex(int index);
+	void Activate(bool isActive);
+	
 // set active and deactivate
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	int Index;
+	bool IsActive;
+
 
 public:	
 	// Called every frame
