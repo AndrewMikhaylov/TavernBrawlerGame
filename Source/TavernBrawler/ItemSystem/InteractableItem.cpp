@@ -5,6 +5,7 @@
 
 #include "TavernBrawlerCharacter.h"
 #include "Engine/DamageEvents.h"
+#include "World/ObjectPool/ObjectPoolSubsystem.h"
 
 // Sets default values
 AInteractableItem::AInteractableItem()
@@ -42,7 +43,7 @@ void AInteractableItem::Tick(float DeltaTime)
 }
 
 void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                       UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (IsAttacking && !ActorsHit.Contains(OtherActor))
 	{
@@ -164,7 +165,6 @@ void AInteractableItem::BreakItem()
 {
 	ThisItemOwner = nullptr;
 	OnItemBroken.Broadcast(nextItem);
-	
-	Destroy();
+	OnObjectDestroyed.Broadcast(Name, GetIndex());
 }
 

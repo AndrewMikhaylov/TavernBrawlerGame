@@ -14,6 +14,9 @@ class TAVERNBRAWLER_API APoolableObject : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APoolableObject();
+
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnObjectDestroyed, FString, int);
+	FOnObjectDestroyed OnObjectDestroyed;
 	
 	UPROPERTY(EditAnywhere)
 	FString Name;

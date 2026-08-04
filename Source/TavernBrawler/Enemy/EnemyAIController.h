@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "TavernBrawlerCharacter.h"
 #include "ItemSystem/InteractableItem.h"
+#include "World/ObjectPool/ObjectPoolSubsystem.h"
 #include "EnemyAIController.generated.h"
 
 /**
@@ -35,13 +36,15 @@ public:
 	bool bIsDead = false;
 	
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AInteractableItem> InteractableItem;
+	FString InteractableItemName;
 	
 	UPROPERTY(EditAnywhere)
 	UBehaviorTree* BehaviorTree;
 
 	DECLARE_MULTICAST_DELEGATE(OnAiDead)
 	OnAiDead OnAiDeadDelegate;
+
+	UObjectPoolSubsystem* ObjectPool;
 	
 	void Attack();
 	void SetReadyToFight();

@@ -4,20 +4,25 @@
 #include "World/ObjectPool/ObjectPoolSubsystem.h"
 
 #include "ItemSystem/InteractableItem.h"
+#include "World/LevelDeveloperSettings.h"
 
 void UObjectPoolSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
-	for (auto poolableObjectSubclass : PoolableObjects)
+
+	SetPoolData();
+	
+	for (auto poolableObjectSubclass : PoolData->PoolableObjects)
 	{
 		FString poolName = poolableObjectSubclass->GetDefaultObject<APoolableObject>()->Name;
 		TArray<APoolableObject*> poolableObjectsOfType;
-		for (int i = 0; i < PoolSize; ++i)
+		for (int i = 0; i < PoolData->PoolSize; ++i)
 		{
 			APoolableObject* PoolableObject = CreatePoolableObject(poolableObjectSubclass, i);
-			PoolableObject->Activate(false);
 			if (PoolableObject)
 			{
+				PoolableObject->Activate(false);
+				PoolableObject->OnObjectDestroyed.AddUObject(this, &UObjectPoolSubsystem::DeactivatePoolableObject);
 				poolableObjectsOfType.Add(PoolableObject);
 			}
 		}
@@ -64,6 +69,19 @@ void UObjectPoolSubsystem::DeactivatePoolableObject(FString name, int index)
 	}
 }
 
+bool UObjectPoolSubsystem::ShouldCreateSubsystem(UObject* Outer) const
+{
+	if (UWorld* world = Cast<UWorld>(Outer))
+	{
+		FString worldName = world->GetName();
+		if (worldName.Contains("MainMenuLevel"))
+		{
+			return false;
+		}
+	}
+	return Super::ShouldCreateSubsystem(Outer);
+}
+
 APoolableObject* UObjectPoolSubsystem::CreatePoolableObject(TSubclassOf<APoolableObject> poolableObjectSubclass, int index)
 {
 	AActor* poolableObjectActor = GetWorld()->SpawnActor(poolableObjectSubclass);
@@ -75,4 +93,10 @@ APoolableObject* UObjectPoolSubsystem::CreatePoolableObject(TSubclassOf<APoolabl
 		return PoolableObject;
 	}
 	return nullptr;
+}
+
+void UObjectPoolSubsystem::SetPoolData()
+{
+	const ULevelDeveloperSettings* settings = GetDefault<ULevelDeveloperSettings>();
+	PoolData = settings->GetObjectPoolLevelData();
 }

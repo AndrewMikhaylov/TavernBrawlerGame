@@ -158,7 +158,6 @@ AInteractableItem* UPlayerItemManager::TakeItem(FVector StartPosition, FVector L
 
 void UPlayerItemManager::EquipAsThrowWeapon(AInteractableItem* throwableItem)
 {
-
 	throwableItem->PickUp(GetOwner());
 	throwableItem->AttachToComponent(LeftHand, FAttachmentTransformRules::SnapToTargetIncludingScale, "hand_l_socket");
 }

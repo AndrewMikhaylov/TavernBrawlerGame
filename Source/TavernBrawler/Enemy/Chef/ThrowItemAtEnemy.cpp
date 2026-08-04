@@ -5,6 +5,7 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Enemy/EnemyAIController.h"
+#include "World/ObjectPool/ObjectPoolSubsystem.h"
 
 
 UThrowItemAtEnemy::UThrowItemAtEnemy()
@@ -26,7 +27,7 @@ EBTNodeResult::Type UThrowItemAtEnemy::ExecuteTask(UBehaviorTreeComponent& Owner
 	AIController->SetFocalPoint(EnemyCharacter->GetActorLocation());
 	if (EnemyCharacter->CheckIsAlive() && EnemyCharacter)
 	{
-		AInteractableItem* weapon = Cast<AInteractableItem>(GetWorld()->SpawnActor(AIController->InteractableItem));
+		AInteractableItem* weapon = AIController->ObjectPool->ActivatePoolableObject(AIController->InteractableItemName);
 		ThisCharacter->PlayerInventory->TakeToThrow(weapon);
 		ThisCharacter->PlayerInventory->EquipAsThrowWeapon(weapon);
 		AIController->Attack();

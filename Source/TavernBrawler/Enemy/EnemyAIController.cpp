@@ -17,6 +17,7 @@ void AEnemyAIController::SetEnemyAI(ATavernBrawlerCharacter* playerCharacter)
 {
 	Player = playerCharacter;
 	ThisCharacter = Cast<ATavernBrawlerCharacter>(GetPawn());
+	ObjectPool = GetWorld()->GetSubsystem<UObjectPoolSubsystem>();
 	RunBehaviorTree(BehaviorTree);
 
 }
