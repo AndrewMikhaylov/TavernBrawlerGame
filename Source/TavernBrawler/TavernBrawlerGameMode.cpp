@@ -4,6 +4,7 @@
 #include "TavernBrawlerPlayerController.h"
 #include "Enemy/EnemyAIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "World/Sound/SoundLevelPlayerSubsystem.h"
 
 
 ATavernBrawlerGameMode::ATavernBrawlerGameMode()
@@ -34,6 +35,7 @@ void ATavernBrawlerGameMode::BeginFight()
 	}
 }
 
+
 void ATavernBrawlerGameMode::BeginPlay()
 {
 	Super::BeginPlay();
@@ -57,6 +59,14 @@ void ATavernBrawlerGameMode::BeginPlay()
 		ATavernBrawlerCharacter* tavernCharacter = Cast<ATavernBrawlerCharacter>(tavernFighter);
 		tavernCharacter->OnFirstDamageTaken.AddUObject(this, &ATavernBrawlerGameMode::BeginFight);
 	}
+
+	LevelSoundSubSystem = GetWorld()->GetSubsystem<USoundLevelPlayerSubsystem>();
+
+}
+
+void ATavernBrawlerGameMode::PlaySoundAtLocation(TSoftObjectPtr<USoundBase> soundToPlay, FVector location)
+{
+	LevelSoundSubSystem->PlaySoundEffect(soundToPlay, location);
 }
 
 void ATavernBrawlerGameMode::MakeProgressToWin()
@@ -70,6 +80,10 @@ void ATavernBrawlerGameMode::MakeProgressToWin()
 
 void ATavernBrawlerGameMode::SetGameLost()
 {
+	if (LevelSoundSubSystem)
+	{
+		LevelSoundSubSystem->StopWorldSound();
+	}
 	EndLevel(false);
 }
 

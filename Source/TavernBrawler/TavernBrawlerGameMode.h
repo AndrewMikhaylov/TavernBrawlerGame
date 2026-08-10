@@ -6,6 +6,7 @@
 #include "TavernBrawlerCharacter.h"
 #include "GameFramework/GameModeBase.h"
 #include "UI/HUDEndGameWidget.h"
+#include "World/Sound/SoundLevelPlayerSubsystem.h"
 #include "TavernBrawlerGameMode.generated.h"
 
 /**
@@ -22,6 +23,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	void BeginFight();
+	void PlaySoundAtLocation(TSoftObjectPtr<USoundBase> soundToPlay, FVector location);
 protected:
 	virtual void BeginPlay() override;
 	TArray<AActor*> Enemies;
@@ -30,6 +32,8 @@ protected:
 	APlayerController* playerController;
 	bool bFightStarted = false;
 	int EnemiesAmount;
+
+	USoundLevelPlayerSubsystem* LevelSoundSubSystem;
 	
 	void MakeProgressToWin();
 	void SetGameLost();

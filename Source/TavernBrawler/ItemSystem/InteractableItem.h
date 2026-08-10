@@ -54,9 +54,14 @@ protected:
 
 public:
 
-	DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemBroken, AInteractableItem*)
+	DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemBroken, AInteractableItem*);
 	FOnItemBroken OnItemBroken;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "InteractableItem")
+	void OnObjectHitSoundStart();
+	UFUNCTION(BlueprintImplementableEvent, Category = "InteractableItem")
+	void OnObjectBrokenSoundStart();
+	
 	void Throw(FVector Direction);
 
 	void BeginHitOnOverlap();

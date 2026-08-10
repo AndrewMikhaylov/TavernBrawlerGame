@@ -70,6 +70,7 @@ private:
 	FVector CalculateEndPosition(FVector StartPosition, FVector LookingDirection);
 	AInteractableItem* TakeItem(FVector StartPosition, FVector LookingDirection);
 	void EquipAsFightWeapon(AInteractableItem* meleeItem);
+	UFUNCTION()
 	void FreeFightingHand(AInteractableItem* newItem);
 
 };

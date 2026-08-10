@@ -57,7 +57,10 @@ void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 				this);	
 		}
 		CurrentDurability--;
-
+		if (CurrentDurability>0)
+		{
+			OnObjectHitSoundStart();
+		}
 		ActorsHit.Add(OtherActor);
 	}
 }
@@ -103,6 +106,7 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 		if (CurrentDurability > 1)
 		{
 			CurrentDurability = 1;
+			OnObjectHitSoundStart();
 		}
 		else
 		{
@@ -134,6 +138,7 @@ void AInteractableItem::DeactivateOverlap()
 	{
 		BreakTransformItem();
 	}
+	
 }
 
 void AInteractableItem::InitializeItem()
@@ -147,13 +152,13 @@ void AInteractableItem::InitializeItem()
 void AInteractableItem::BreakTransformItem()
 {
 	FTransform SpawnLocation = GetActorTransform();
+	OnObjectBrokenSoundStart();
 	TArray<AInteractableItem*> Items;
 	if (ItemData->BrokenActors.Num()>=1)
 	{
 		for (const TSubclassOf<AActor>& BrokenItem : ItemData->BrokenActors)
 		{
 			Items.Add(GetWorld()->SpawnActor<AInteractableItem>(BrokenItem, SpawnLocation));
-			//add them flying in different directions
 		}
 		int32 randomIndex = FMath::FRandRange(0.f,Items.Num()-1);
 		nextItem = Items[randomIndex];	
