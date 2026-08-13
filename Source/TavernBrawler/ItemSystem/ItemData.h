@@ -36,4 +36,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TArray<TSubclassOf<AActor>> BrokenActors;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSoftObjectPtr<USoundBase> soundToPlay;
 };

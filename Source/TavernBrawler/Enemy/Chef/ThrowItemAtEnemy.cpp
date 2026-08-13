@@ -24,6 +24,8 @@ EBTNodeResult::Type UThrowItemAtEnemy::ExecuteTask(UBehaviorTreeComponent& Owner
 	}
 	ATavernBrawlerCharacter* ThisCharacter = AIController->ThisCharacter;
 	ATavernBrawlerCharacter* EnemyCharacter = AIController->CurrentEnemy;
+	AIController->soundPlayerSubsystem->PlaySoundEffect(AIController->AttackSound, ThisCharacter->GetActorLocation());
+
 	AIController->SetFocalPoint(EnemyCharacter->GetActorLocation());
 	if (EnemyCharacter->CheckIsAlive() && EnemyCharacter)
 	{

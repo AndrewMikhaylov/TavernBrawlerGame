@@ -4,6 +4,7 @@
 #include "ItemSystem/InteractableItem.h"
 
 #include "TavernBrawlerCharacter.h"
+#include "TavernBrawlerGameMode.h"
 #include "Engine/DamageEvents.h"
 #include "World/ObjectPool/ObjectPoolSubsystem.h"
 
@@ -59,7 +60,7 @@ void AInteractableItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 		CurrentDurability--;
 		if (CurrentDurability>0)
 		{
-			OnObjectHitSoundStart();
+			PlaySound();
 		}
 		ActorsHit.Add(OtherActor);
 	}
@@ -106,7 +107,7 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 		if (CurrentDurability > 1)
 		{
 			CurrentDurability = 1;
-			OnObjectHitSoundStart();
+			PlaySound();
 		}
 		else
 		{
@@ -141,6 +142,16 @@ void AInteractableItem::DeactivateOverlap()
 	
 }
 
+void AInteractableItem::Activate(bool isActive)
+{
+	Super::Activate(isActive);
+	ATavernBrawlerGameMode* gameMode = Cast<ATavernBrawlerGameMode>(GetWorld()->GetAuthGameMode());
+	if (gameMode)
+	{
+		OnItemSoundPlay.AddUObject(gameMode, &ATavernBrawlerGameMode::PlaySoundAtLocation);
+	}
+}
+
 void AInteractableItem::InitializeItem()
 {
 	visualMesh->SetStaticMesh(ItemData->VisualMesh);
@@ -152,7 +163,7 @@ void AInteractableItem::InitializeItem()
 void AInteractableItem::BreakTransformItem()
 {
 	FTransform SpawnLocation = GetActorTransform();
-	OnObjectBrokenSoundStart();
+	PlaySound();
 	TArray<AInteractableItem*> Items;
 	if (ItemData->BrokenActors.Num()>=1)
 	{
@@ -171,5 +182,10 @@ void AInteractableItem::BreakItem()
 	ThisItemOwner = nullptr;
 	OnItemBroken.Broadcast(nextItem);
 	OnObjectDestroyed.Broadcast(Name, GetIndex());
+}
+
+void AInteractableItem::PlaySound()
+{
+	OnItemSoundPlay.Broadcast(ItemData->soundToPlay, GetActorLocation());
 }
 

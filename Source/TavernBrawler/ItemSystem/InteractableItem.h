@@ -57,11 +57,9 @@ public:
 	DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemBroken, AInteractableItem*);
 	FOnItemBroken OnItemBroken;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "InteractableItem")
-	void OnObjectHitSoundStart();
-	UFUNCTION(BlueprintImplementableEvent, Category = "InteractableItem")
-	void OnObjectBrokenSoundStart();
-	
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemSoundPlay, TSoftObjectPtr<USoundBase>, FVector);
+	FOnItemSoundPlay OnItemSoundPlay;
+		
 	void Throw(FVector Direction);
 
 	void BeginHitOnOverlap();
@@ -72,10 +70,12 @@ public:
 
 	void PickUp(AActor* ItemOwner);
 	void DeactivateOverlap();
+	void Activate(bool isActive) override;
 private:
 	void InitializeItem();
 	void BreakTransformItem();
 	void BreakItem();
+	void PlaySound();
 	
 	AActor* ThisItemOwner;
 	FCollisionResponseContainer CollisionParameters;

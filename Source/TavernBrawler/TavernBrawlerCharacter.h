@@ -151,8 +151,6 @@ protected:
 
 	void UpdateHUD();
 
-protected:
-
 	/** Set up input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
@@ -160,6 +158,8 @@ protected:
 	UActorHealthSystem* ActorHealthSystem;	
 	void InitateDeath();
 
+	UPROPERTY(EditAnywhere)
+	TSoftObjectPtr<USoundBase> DeathSound;
 	
 	bool IsReadyToAttack;
 	void ResetAttackCooldown();

@@ -24,7 +24,7 @@ public:
 	int GetIndex();
 	bool CheckIsActive();
 	void SetIndex(int index);
-	void Activate(bool isActive);
+	virtual void Activate(bool isActive);
 	
 // set active and deactivate
 protected:

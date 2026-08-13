@@ -20,25 +20,27 @@ EBTNodeResult::Type UMeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	ATavernBrawlerCharacter* currentEnemy = Cast<ATavernBrawlerCharacter>(BlackboardComponent->GetValueAsObject(CurrentEnemy.SelectedKeyName));
-	AEnemyAIController* thisEnemyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
+	AEnemyAIController* AIController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 	
-	if (thisEnemyController && currentEnemy)
+	AIController->soundPlayerSubsystem->PlaySoundEffect(AIController->AttackSound, AIController->ThisCharacter->GetActorLocation());
+
+	if (AIController && currentEnemy)
 	{
-		thisEnemyController->SetFocalPoint(currentEnemy->GetActorLocation());
+		AIController->SetFocalPoint(currentEnemy->GetActorLocation());
 		FVector currentEnemyLocation = currentEnemy->GetActorLocation();
-		FVector thisControllerLocation = thisEnemyController->ThisCharacter->GetActorLocation();
+		FVector thisControllerLocation = AIController->ThisCharacter->GetActorLocation();
 		float distanceBetweenEnemies = FVector::Distance(currentEnemyLocation, thisControllerLocation);
-		FVector AIForward = thisEnemyController->GetPawn()->GetActorForwardVector();
-		FVector AIToEnemy = (currentEnemyLocation - thisEnemyController->GetPawn()->GetActorForwardVector()).GetSafeNormal();
+		FVector AIForward = AIController->GetPawn()->GetActorForwardVector();
+		FVector AIToEnemy = (currentEnemyLocation - AIController->GetPawn()->GetActorForwardVector()).GetSafeNormal();
 		float angle = FVector::DotProduct(AIForward, AIToEnemy);
-		thisEnemyController->bIsAttacking = true;
+		AIController->bIsAttacking = true;
 		if (distanceBetweenEnemies<=BlackboardComponent->GetValueAsFloat(AttackRange.SelectedKeyName) && angle<=1 && angle>=0.6)
 		{
 			FPointDamageEvent DamageEvent;
 			currentEnemy->TakeDamage(BlackboardComponent->GetValueAsFloat(AttackDamage.SelectedKeyName),
 				DamageEvent,
-				thisEnemyController,
-				thisEnemyController->ThisCharacter);
+				AIController,
+				AIController->ThisCharacter);
 		}
 		return EBTNodeResult::Succeeded;
 	}

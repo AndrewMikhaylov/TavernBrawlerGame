@@ -44,23 +44,10 @@ void ATavernBrawlerGameMode::BeginPlay()
 	playerController = GetWorld()->GetFirstPlayerController();
 	
 	playerCharacter->OnPlayerDead.AddUObject(this, &ATavernBrawlerGameMode::SetGameLost);
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATavernBrawlerCharacter::StaticClass(), TavernFighters);
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAIController::StaticClass(), Enemies);
-	EnemiesAmount = Enemies.Num();
-	for (auto Enemy : Enemies)
-	{
-		AEnemyAIController* enemyController = Cast<AEnemyAIController>(Enemy);
-		enemyController->SetEnemyAI(playerCharacter);
-		enemyController->OnAiDeadDelegate.AddUObject(this, &ATavernBrawlerGameMode::MakeProgressToWin);
-	}
-
-	for (auto tavernFighter : TavernFighters)
-	{
-		ATavernBrawlerCharacter* tavernCharacter = Cast<ATavernBrawlerCharacter>(tavernFighter);
-		tavernCharacter->OnFirstDamageTaken.AddUObject(this, &ATavernBrawlerGameMode::BeginFight);
-	}
-
+	SetEnemies();
 	LevelSoundSubSystem = GetWorld()->GetSubsystem<USoundLevelPlayerSubsystem>();
+
+	
 
 }
 
@@ -104,4 +91,37 @@ void ATavernBrawlerGameMode::EndLevel(bool gameIsWon)
 
 	playerController->bShowMouseCursor = true;
 	playerController->SetInputMode(FInputModeUIOnly());
+}
+
+void ATavernBrawlerGameMode::SetEnemies()
+{
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATavernBrawlerCharacter::StaticClass(), TavernFighters);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAIController::StaticClass(), Enemies);
+	EnemiesAmount = Enemies.Num();
+	for (auto Enemy : Enemies)
+	{
+		AEnemyAIController* enemyController = Cast<AEnemyAIController>(Enemy);
+		enemyController->SetEnemyAI(playerCharacter);
+		enemyController->OnAiDeadDelegate.AddUObject(this, &ATavernBrawlerGameMode::MakeProgressToWin);
+	}
+
+	for (auto tavernFighter : TavernFighters)
+	{
+		ATavernBrawlerCharacter* tavernCharacter = Cast<ATavernBrawlerCharacter>(tavernFighter);
+		tavernCharacter->OnFirstDamageTaken.AddUObject(this, &ATavernBrawlerGameMode::BeginFight);
+	}
+}
+
+void ATavernBrawlerGameMode::SetItems()
+{
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInteractableItem::StaticClass(), ExistingInteractableItems);
+	for (auto item : ExistingInteractableItems)
+	{
+		AInteractableItem* interactableItem = Cast<AInteractableItem>(item);
+		if (interactableItem)
+		{
+			interactableItem->OnItemSoundPlay.AddUObject(this, &ATavernBrawlerGameMode::PlaySoundAtLocation);
+		}
+		
+	}
 }

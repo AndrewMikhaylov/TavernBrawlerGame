@@ -28,6 +28,7 @@ protected:
 	virtual void BeginPlay() override;
 	TArray<AActor*> Enemies;
 	TArray<AActor*> TavernFighters;
+	TArray<AActor*> ExistingInteractableItems;
 	ATavernBrawlerCharacter* playerCharacter;
 	APlayerController* playerController;
 	bool bFightStarted = false;
@@ -38,6 +39,8 @@ protected:
 	void MakeProgressToWin();
 	void SetGameLost();
 	void EndLevel(bool gameIsWon);
+	void SetEnemies();
+	void SetItems();
 
 };
 

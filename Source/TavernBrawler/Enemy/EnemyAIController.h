@@ -7,6 +7,7 @@
 #include "TavernBrawlerCharacter.h"
 #include "ItemSystem/InteractableItem.h"
 #include "World/ObjectPool/ObjectPoolSubsystem.h"
+#include "World/Sound/SoundLevelPlayerSubsystem.h"
 #include "EnemyAIController.generated.h"
 
 /**
@@ -25,7 +26,7 @@ public:
 	ATavernBrawlerCharacter* ThisCharacter;
 	ATavernBrawlerCharacter* Player;
 	ATavernBrawlerCharacter* CurrentEnemy;
-	
+	USoundLevelPlayerSubsystem* soundPlayerSubsystem;
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsAttacking;
 
@@ -37,6 +38,9 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	FString InteractableItemName;
+
+	UPROPERTY(EditAnywhere)
+	TSoftObjectPtr<USoundBase> AttackSound;
 	
 	UPROPERTY(EditAnywhere)
 	UBehaviorTree* BehaviorTree;

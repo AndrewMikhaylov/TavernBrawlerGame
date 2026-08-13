@@ -109,6 +109,9 @@ void ATavernBrawlerCharacter::InitateDeath()
 	{
 		OnPlayerDead.Broadcast();
 	}
+	USoundLevelPlayerSubsystem* soundPlayerSubsystem = GetWorld()->GetSubsystem<USoundLevelPlayerSubsystem>();
+	soundPlayerSubsystem->PlaySoundEffect(DeathSound, GetActorLocation());
+
 }
 
 void ATavernBrawlerCharacter::ResetAttackCooldown()
