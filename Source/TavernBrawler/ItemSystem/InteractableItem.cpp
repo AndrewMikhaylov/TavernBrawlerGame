@@ -104,15 +104,11 @@ void AInteractableItem::DealThrowDamage(UPrimitiveComponent* HitComponent, AActo
 				ThisItemOwner->GetInstigatorController(),
 				this);	
 		}
-		if (CurrentDurability > 1)
-		{
-			CurrentDurability = 1;
-			PlaySound();
-		}
-		else
-		{
-			BreakTransformItem();
-		}
+		
+		CurrentDurability = 0;
+		PlaySound();
+		BreakTransformItem();
+		
 		IsThrown = false;
 		ThisItemOwner=nullptr;
 	
@@ -163,7 +159,6 @@ void AInteractableItem::InitializeItem()
 void AInteractableItem::BreakTransformItem()
 {
 	FTransform SpawnLocation = GetActorTransform();
-	PlaySound();
 	TArray<AInteractableItem*> Items;
 	if (ItemData->BrokenActors.Num()>=1)
 	{

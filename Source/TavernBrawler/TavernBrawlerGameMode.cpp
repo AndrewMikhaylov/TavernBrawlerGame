@@ -46,7 +46,6 @@ void ATavernBrawlerGameMode::BeginPlay()
 	playerCharacter->OnPlayerDead.AddUObject(this, &ATavernBrawlerGameMode::SetGameLost);
 	SetEnemies();
 	LevelSoundSubSystem = GetWorld()->GetSubsystem<USoundLevelPlayerSubsystem>();
-
 	
 
 }

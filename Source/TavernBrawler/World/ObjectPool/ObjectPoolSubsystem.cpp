@@ -4,19 +4,32 @@
 #include "World/ObjectPool/ObjectPoolSubsystem.h"
 
 #include "ItemSystem/InteractableItem.h"
+#include "Kismet/GameplayStatics.h"
 #include "World/LevelDeveloperSettings.h"
 
 void UObjectPoolSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
+	TArray<AActor*> existingObjectsArray;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APoolableObject::StaticClass(), existingObjectsArray);
 
 	SetPoolData();
-	
 	for (auto poolableObjectSubclass : PoolData->PoolableObjects)
 	{
 		FString poolName = poolableObjectSubclass->GetDefaultObject<APoolableObject>()->Name;
 		TArray<APoolableObject*> poolableObjectsOfType;
-		for (int i = 0; i < PoolData->PoolSize; ++i)
+		for (auto existingActor : existingObjectsArray)
+		{
+			APoolableObject* existingObject = Cast<APoolableObject>(existingActor);
+			if (existingObject->Name == poolName)
+			{
+				poolableObjectsOfType.Add(existingObject);
+				existingObject->SetIndex(poolableObjectsOfType.Num());
+				existingObject->OnObjectDestroyed.AddUObject(this, &UObjectPoolSubsystem::DeactivatePoolableObject);
+				existingObject->Activate(true);
+			}
+		}
+		for (int i = poolableObjectsOfType.Num(); i < PoolData->PoolSize; ++i)
 		{
 			APoolableObject* PoolableObject = CreatePoolableObject(poolableObjectSubclass, i);
 			if (PoolableObject)

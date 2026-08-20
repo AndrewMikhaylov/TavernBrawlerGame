@@ -27,6 +27,7 @@ protected:
 	APoolableObject* CreatePoolableObject(TSubclassOf<APoolableObject> poolableObjectSubclass, int index);
 
 	void SetPoolData();
+	void AddExistingObjectsToPool();
 public:
 	AInteractableItem* ActivatePoolableObject(FString name);
 	void DeactivatePoolableObject(FString name, int index);

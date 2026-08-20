@@ -28,7 +28,8 @@ void USoundLevelPlayerSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
 	const ULevelDeveloperSettings* settings = GetDefault<ULevelDeveloperSettings>();
-	settings->GetBackGroundMusic(UGameplayStatics::GetCurrentLevelName(GetWorld()));
+	TSoftObjectPtr<USoundBase> soundToPlay = settings->GetBackGroundMusic(UGameplayStatics::GetCurrentLevelName(GetWorld()));
+	PlayWorldSound(soundToPlay);
 }
 
 
