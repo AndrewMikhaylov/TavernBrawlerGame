@@ -21,20 +21,23 @@ EBTNodeResult::Type UMeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	ATavernBrawlerCharacter* currentEnemy = Cast<ATavernBrawlerCharacter>(BlackboardComponent->GetValueAsObject(CurrentEnemy.SelectedKeyName));
 	AEnemyAIController* AIController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
-	
-	AIController->soundPlayerSubsystem->PlaySoundEffect(AIController->AttackSound, AIController->ThisCharacter->GetActorLocation());
 
 	if (AIController && currentEnemy)
 	{
+		AIController->soundPlayerSubsystem->PlaySoundEffect(AIController->AttackSound, AIController->ThisCharacter->GetActorLocation());
 		AIController->SetFocalPoint(currentEnemy->GetActorLocation());
 		FVector currentEnemyLocation = currentEnemy->GetActorLocation();
 		FVector thisControllerLocation = AIController->ThisCharacter->GetActorLocation();
 		float distanceBetweenEnemies = FVector::Distance(currentEnemyLocation, thisControllerLocation);
+		FVector AILocation = AIController->GetPawn()->GetActorLocation();
+		FVector EnemyLocation = currentEnemy->GetActorLocation();
+
+		FVector AIToEnemy = (EnemyLocation - AILocation).GetSafeNormal();
 		FVector AIForward = AIController->GetPawn()->GetActorForwardVector();
-		FVector AIToEnemy = (currentEnemyLocation - AIController->GetPawn()->GetActorForwardVector()).GetSafeNormal();
-		float angle = FVector::DotProduct(AIForward, AIToEnemy);
+
+		float Dot = FVector::DotProduct(AIForward, AIToEnemy);
 		AIController->bIsAttacking = true;
-		if (distanceBetweenEnemies<=BlackboardComponent->GetValueAsFloat(AttackRange.SelectedKeyName) && angle<=1 && angle>=0.6)
+		if (distanceBetweenEnemies<=BlackboardComponent->GetValueAsFloat(AttackRange.SelectedKeyName) && Dot<=1 && Dot>=0.8)
 		{
 			FPointDamageEvent DamageEvent;
 			currentEnemy->TakeDamage(BlackboardComponent->GetValueAsFloat(AttackDamage.SelectedKeyName),

@@ -2,7 +2,6 @@
 
 #include "Enemy/Chef/RepositionAroundEnemy.h"
 
-#include "AssetTypeCategories.h"
 #include "NavigationSystem.h"
 #include "Enemy/EnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -30,7 +29,7 @@ EBTNodeResult::Type URepositionAroundEnemy::ExecuteTask(UBehaviorTreeComponent& 
 	{
 		NavSys->GetRandomReachablePointInRadius(enemyPosition, RepositionRadius, Location);
 	}
-	AIController->ClearFocus(EAssetTypeCategories::Gameplay);
+	AIController->ClearFocus(EAIFocusPriority::Gameplay);
 	AIController->SetFocalPoint(Location.Location);
 	BlackboardComponent->SetValueAsVector(LocationAroundEnemy.SelectedKeyName, Location.Location);
 	return EBTNodeResult::Succeeded;

@@ -3,8 +3,6 @@
 
 #include "PoolableObject.h"
 
-#include "SkeletonTreeBuilder.h"
-
 // Sets default values
 APoolableObject::APoolableObject()
 {
